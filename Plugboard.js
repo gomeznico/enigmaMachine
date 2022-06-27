@@ -1,4 +1,4 @@
-class Plugboard {
+export class Plugboard {
   constructor() {
     this.plugs = {};
   }
@@ -7,6 +7,8 @@ class Plugboard {
 Plugboard.prototype.addPlug = function (letter1, letter2) {
   //max plugs is 10
   let keys = Object.getOwnPropertyNames(this.plugs);
+
+  //make sure plug does not already exist
   if (keys.length <= 20) {
     this.plugs[letter1] = letter2;
     this.plugs[letter2] = letter1;
@@ -28,8 +30,4 @@ Plugboard.prototype.encrypt = function (letter) {
     return this.plugs[letter];
   }
   return letter;
-};
-
-module.exports = {
-  Plugboard,
 };
