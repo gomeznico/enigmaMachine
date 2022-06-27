@@ -1,6 +1,7 @@
 export class Plugboard {
-  constructor() {
+  constructor(arr) {
     this.plugs = {};
+    this.addPlugs(arr);
   }
 }
 
@@ -27,7 +28,6 @@ Plugboard.prototype.addPlugs = function (arrOfLetterPairs) {
 
 Plugboard.prototype.encrypt = function (letter) {
   //returns encrypted letter pair, or the regular letter if no plug exists
-
   if (!!this.plugs[letter]) {
     return this.plugs[letter];
   }

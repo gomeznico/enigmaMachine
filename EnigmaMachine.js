@@ -6,34 +6,25 @@ import { Rotor } from "./Rotor.js";
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-//Rotor wirings: Input ABCDEFGHIJKLMNOPQRSTUVWXYZ -> output
-const rotorIwiring = "EKMFLGDQVZNTOWYHXUSPAIBRCJ"; // startPos= A, turnover on A
-const rotorIIwiring = "AJDKSIRUXBLHWTMCQGZNPYFVOE"; // startPos= A, turnover on A
-const rotorIIIwiring = "BDFHJLCPRTXVZNYEIWGAKMUSQO"; // startPos= A, turnover on A
-const rotorIVwiring = "ESOVPZJAYQUIRHXLNFTGKDCMWB"; // startPos= A, turnover on A
-const rotorVwiring = "VZBRGITYUPSDNHLXAWMJQOFECK"; // startPos= A, turnover on A
-const rotorVIwiring = "JPGVOUMFYQBENHZRDKASXLICTW"; // startPos= A, turnover on A
-const rotorVIIwiring = "NZJHGRCXMYSWBOUFAIVLPEKQDT"; // startPos= A, turnover on A
-const rotorVIIIwiring = "FKQHTLXOCBJSPDZRAMEWNIUYGV"; // startPos= A, turnover on A
-
-// Reflector Wirings: Input ABCDEFGHIJKLMNOPQRSTUVWXYZ
-const reflectorAwiring = "EJMZALYXVBWFCRQUONTSPIKHGD";
-const reflectorBwiring = "YRUHQSLDPXNGOKMIEBFZCWVJAT";
-const reflectorCwiring = "FVPJIAOYEDRZXWGCTKUQSBNMHL";
-
 export class EnigmaMachine {
-  constructor() {
-    this.plugboard = null;
+  constructor(plugboard, reflector, leftRotor, middleRotor, rightRotor) {
+    this.plugboard = plugboard;
     this.leftRotor = null;
     this.middleRotor = null;
     this.rightRotor = null;
-    this.reflector = null;
+    this.reflector = reflector;
     this.initial = null;
+    // call functions to set rotors,
+    this.setRotors(leftRotor, middleRotor, rightRotor);
   }
 }
 
 EnigmaMachine.prototype.setPlugboard = function (plugboard) {
   this.plugboard = plugboard;
+};
+
+EnigmaMachine.prototype.setReflector = function (reflector) {
+  this.reflector = reflector;
 };
 
 EnigmaMachine.prototype.setRotors = function (
@@ -67,10 +58,6 @@ EnigmaMachine.prototype.setRotors = function (
   };
 };
 
-EnigmaMachine.prototype.setReflector = function (reflector) {
-  this.reflector = reflector;
-};
-
 EnigmaMachine.prototype.encrypt = function (letter) {
   // letters go into
   // plugboard -> then rotor 1 -> 2 -> 3 -> mirror -> 3 -> 2 -> 1 -> plugboard
@@ -98,7 +85,8 @@ EnigmaMachine.prototype.encrypt = function (letter) {
 };
 
 EnigmaMachine.prototype.encryptPhrase = function (phrase) {
-  // only accepts letters for now, punctuations and spaces are unaltered
+  // only accepts letters for now, punctuations and spaces
+  // are unaltered for sake of readability on decryption
   let output = "";
   for (let i = 0; i < phrase.length; i++) {
     const letter = phrase[i].toUpperCase();
@@ -112,20 +100,23 @@ EnigmaMachine.prototype.encryptPhrase = function (phrase) {
 };
 
 EnigmaMachine.prototype.reset = function () {
-  const resetLeftRotor = new Rotor();
-  resetLeftRotor.setWiringTable(this.initial.leftRotor.wiringTable);
-  resetLeftRotor.setStartPosition(this.initial.leftRotor.startLetter);
-  resetLeftRotor.setTurnoverLetter(this.initial.leftRotor.turnoverLetter);
+  const resetLeftRotor = new Rotor(
+    this.initial.leftRotor.wiringTable,
+    this.initial.leftRotor.startLetter,
+    this.initial.leftRotor.turnoverLetter
+  );
 
-  const resetMiddleRotor = new Rotor();
-  resetMiddleRotor.setWiringTable(this.initial.middleRotor.wiringTable);
-  resetMiddleRotor.setStartPosition(this.initial.middleRotor.startLetter);
-  resetMiddleRotor.setTurnoverLetter(this.initial.middleRotor.turnoverLetter);
+  const resetMiddleRotor = new Rotor(
+    this.initial.middleRotor.wiringTable,
+    this.initial.middleRotor.startLetter,
+    this.initial.middleRotor.turnoverLetter
+  );
 
-  const resetRightRotor = new Rotor();
-  resetRightRotor.setWiringTable(this.initial.rightRotor.wiringTable);
-  resetRightRotor.setStartPosition(this.initial.rightRotor.startLetter);
-  resetRightRotor.setTurnoverLetter(this.initial.rightRotor.turnoverLetter);
+  const resetRightRotor = new Rotor(
+    this.initial.rightRotor.wiringTable,
+    this.initial.rightRotor.startLetter,
+    this.initial.rightRotor.turnoverLetter
+  );
 
   this.leftRotor = null;
   this.middleRotor = null;

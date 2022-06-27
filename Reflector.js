@@ -6,8 +6,9 @@ const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 // const reflectorCwiring = "FVPJIAOYEDRZXWGCTKUQSBNMHL";
 
 export class Reflector {
-  constructor() {
+  constructor(wiringTable) {
     this.reflectionPairs = {};
+    this.setReflectionPairs(wiringTable);
   }
 }
 
@@ -26,4 +27,3 @@ Reflector.prototype.setReflectionPairs = function (wiringTable) {
 Reflector.prototype.encrypt = function (letter) {
   return this.reflectionPairs[letter];
 };
-

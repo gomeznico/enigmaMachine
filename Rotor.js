@@ -1,20 +1,24 @@
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 // // Input ABCDEFGHIJKLMNOPQRSTUVWXYZ -> output
-// const rotorIwiring = "EKMFLGDQVZNTOWYHXUSPAIBRCJ"; // startPos= A, turnover on A
+const rotorIwiring = "EKMFLGDQVZNTOWYHXUSPAIBRCJ"; // startPos= A, turnover on A
 // const rotorIIwiring = "AJDKSIRUXBLHWTMCQGZNPYFVOE"; // startPos= A, turnover on A
 // const rotorIIIwiring = "BDFHJLCPRTXVZNYEIWGAKMUSQO"; // startPos= A, turnover on A
 // const rotorIVwiring = "ESOVPZJAYQUIRHXLNFTGKDCMWB"; // startPos= A, turnover on A
 // const rotorVwiring = "VZBRGITYUPSDNHLXAWMJQOFECK"; // startPos= A, turnover on A
 
 export class Rotor {
-  constructor() {
-    this.currentLetter = "A";
-    this.turnoverLetter = "A";
-    this.wiringTable = "";
+  constructor(wiringTable, startLetter = "A", turnoverLetter = "A") {
+    this.currentLetter = startLetter;
+    this.turnoverLetter = turnoverLetter;
+    this.wiringTable = wiringTable;
     this.wires = {};
     this.inverseWires = {};
     this.nextRotor = null;
+
+    // functions called
+    this.setWiringTable(wiringTable);
+    this.setStartPosition(startLetter);
   }
 }
 
