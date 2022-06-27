@@ -16,16 +16,6 @@ export class Rotor {
     this.inverseWires = {};
     this.nextRotor = null;
   }
-
-  // needed functions
-  // initialize rotor settings:
-  // - set initial wiring of rotor type
-  // - set start position
-  // - set letter at which next rotor turns
-
-  // Rotor actions:
-  // - step Rotor after each use
-  // - encrypt letter
 }
 
 Rotor.prototype.setWiringTable = function (wiringTable) {
@@ -93,14 +83,3 @@ Rotor.prototype.encrypt = function (letter, direction = "forward") {
   }
   return cipherLetter;
 };
-
-// const RotorI = new Rotor();
-// RotorI.setWiringTable(rotorIwiring);
-// RotorI.setStartPosition("E");
-// RotorI.setTurnoverLetter("C");
-// console.log("start", RotorI.currentLetter);
-
-// for (let i = 1; i < 30; i++) {
-//   RotorI.step();
-//   console.log(RotorI.currentLetter);
-// }

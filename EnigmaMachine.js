@@ -77,12 +77,16 @@ EnigmaMachine.prototype.encrypt = function (letter) {
   this.rightRotor.step();
   let plugOut = this.plugboard.encrypt(letter);
   // console.log("plugboard encyrption: ", plugOut);
+
+  //Rotors forward
   let rotorOneOut = this.rightRotor.encrypt(plugOut);
   let rotorTwoOut = this.middleRotor.encrypt(rotorOneOut);
   let rotorThreeOut = this.leftRotor.encrypt(rotorTwoOut);
   // console.log("Rotors forward encyrption: ", rotorThreeOut);
   let reflected = this.reflector.encrypt(rotorThreeOut);
   // console.log("Reflected Encryption: ", reflected);
+
+  // Rotors reversed
   let rotorThreeReverse = this.leftRotor.encrypt(reflected, "reverse");
   let rotorTwoReverse = this.middleRotor.encrypt(rotorThreeReverse, "reverse");
   let rotorOneReverse = this.rightRotor.encrypt(rotorTwoReverse, "reverse");
@@ -94,6 +98,7 @@ EnigmaMachine.prototype.encrypt = function (letter) {
 };
 
 EnigmaMachine.prototype.encryptPhrase = function (phrase) {
+  // only accepts letters for now, punctuations and spaces are unaltered
   let output = "";
   for (let i = 0; i < phrase.length; i++) {
     const letter = phrase[i].toUpperCase();

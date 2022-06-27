@@ -5,10 +5,10 @@ export class Plugboard {
 }
 
 Plugboard.prototype.addPlug = function (letter1, letter2) {
-  //max plugs is 10
+  //max plugs is 10, so 20 letters max
+  //need to add feature to not allow plug pairs that already exist
+  // i.e. FS and SE are not valid, S can only belong to 1 letter
   let keys = Object.getOwnPropertyNames(this.plugs);
-
-  //make sure plug does not already exist
   if (keys.length <= 20) {
     this.plugs[letter1] = letter2;
     this.plugs[letter2] = letter1;
@@ -26,6 +26,8 @@ Plugboard.prototype.addPlugs = function (arrOfLetterPairs) {
 };
 
 Plugboard.prototype.encrypt = function (letter) {
+  //returns encrypted letter pair, or the regular letter if no plug exists
+
   if (!!this.plugs[letter]) {
     return this.plugs[letter];
   }
