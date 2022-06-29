@@ -1,10 +1,34 @@
-// letters go into
-// plugboard -> rightRotor -> middleRotor -> leftRotor ->
-//    mirror -> leftRotor -> middleRotor -> rightRotor -> plugboard -> output
-
+import { Plugboard } from "./Plugboard.js";
+import { Reflector } from "./Reflector.js";
 import { Rotor } from "./Rotor.js";
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+const reflectorAwiring = "EJMZALYXVBWFCRQUONTSPIKHGD";
+const reflectorBwiring = "YRUHQSLDPXNGOKMIEBFZCWVJAT";
+const reflectorCwiring = "FVPJIAOYEDRZXWGCTKUQSBNMHL";
+
+const reflectorWirings = [reflectorAwiring, reflectorBwiring, reflectorCwiring];
+
+const rotorIwiring = "EKMFLGDQVZNTOWYHXUSPAIBRCJ"; // startPos= A, turnover on A
+const rotorIIwiring = "AJDKSIRUXBLHWTMCQGZNPYFVOE"; // startPos= A, turnover on A
+const rotorIIIwiring = "BDFHJLCPRTXVZNYEIWGAKMUSQO"; // startPos= A, turnover on A
+const rotorIVwiring = "ESOVPZJAYQUIRHXLNFTGKDCMWB"; // startPos= A, turnover on A
+const rotorVwiring = "VZBRGITYUPSDNHLXAWMJQOFECK"; // startPos= A, turnover on A
+// const rotorVIwiring = "JPGVOUMFYQBENHZRDKASXLICTW"; // startPos= A, turnover on A
+// const rotorVIIwiring = "NZJHGRCXMYSWBOUFAIVLPEKQDT"; // startPos= A, turnover on A
+// const rotorVIIIwiring = "FKQHTLXOCBJSPDZRAMEWNIUYGV"; // startPos= A, turnover on A
+
+const rotorWirings = [
+  rotorIwiring,
+  rotorIIwiring,
+  rotorIIIwiring,
+  rotorIVwiring,
+  rotorVwiring,
+  // rotorVIwiring,
+  // rotorVIIwiring,
+  // rotorVIIIwiring,
+];
 
 export class EnigmaMachine {
   constructor(plugboard, reflector, leftRotor, middleRotor, rightRotor) {
@@ -13,7 +37,7 @@ export class EnigmaMachine {
     this.middleRotor = null;
     this.rightRotor = null;
     this.reflector = reflector;
-    this.initial = null;
+    this.initialRotorSettings = null;
     // call functions to set rotors,
     this.setRotors(leftRotor, middleRotor, rightRotor);
   }
@@ -39,7 +63,7 @@ EnigmaMachine.prototype.setRotors = function (
   this.rightRotor.setNextRotor(middleRotor);
   this.middleRotor.setNextRotor(leftRotor);
 
-  this.initial = {
+  this.initialRotorSettings = {
     leftRotor: {
       wiringTable: `${leftRotor.wiringTable}`,
       turnoverLetter: `${leftRotor.turnoverLetter}`,
@@ -101,21 +125,21 @@ EnigmaMachine.prototype.encryptPhrase = function (phrase) {
 
 EnigmaMachine.prototype.reset = function () {
   const resetLeftRotor = new Rotor(
-    this.initial.leftRotor.wiringTable,
-    this.initial.leftRotor.startLetter,
-    this.initial.leftRotor.turnoverLetter
+    this.initialRotorSettings.leftRotor.wiringTable,
+    this.initialRotorSettings.leftRotor.startLetter,
+    this.initialRotorSettings.leftRotor.turnoverLetter
   );
 
   const resetMiddleRotor = new Rotor(
-    this.initial.middleRotor.wiringTable,
-    this.initial.middleRotor.startLetter,
-    this.initial.middleRotor.turnoverLetter
+    this.initialRotorSettings.middleRotor.wiringTable,
+    this.initialRotorSettings.middleRotor.startLetter,
+    this.initialRotorSettings.middleRotor.turnoverLetter
   );
 
   const resetRightRotor = new Rotor(
-    this.initial.rightRotor.wiringTable,
-    this.initial.rightRotor.startLetter,
-    this.initial.rightRotor.turnoverLetter
+    this.initialRotorSettings.rightRotor.wiringTable,
+    this.initialRotorSettings.rightRotor.startLetter,
+    this.initialRotorSettings.rightRotor.turnoverLetter
   );
 
   this.leftRotor = null;
@@ -123,4 +147,35 @@ EnigmaMachine.prototype.reset = function () {
   this.rightRotor = null;
 
   this.setRotors(resetLeftRotor, resetMiddleRotor, resetRightRotor);
+};
+
+EnigmaMachine.random = function () {
+  // create random plugboard
+  const plugboard = new Plugboard.random();
+
+  // select random reflector
+  let reflectorWiring = reflectorWirings[Math.floor(Math.random() * 3)];
+  const reflector = new Reflector(reflectorWiring);
+
+  // select random rotors, only
+  let remainingRotors = [...rotorWirings];
+  let rotors = [];
+  for (let i = 0; i < 3; i++) {
+    let randomStart = alphabet[Math.floor(Math.random() * 26)];
+    let randomTurnLetter = alphabet[Math.floor(Math.random() * 26)];
+    let idx = Math.floor(Math.random() * remainingRotors.length);
+    let rotorWiring = remainingRotors[idx];
+    remainingRotors = remainingRotors.filter(
+      (wiring) => wiring !== rotorWiring
+    );
+    rotors.push(new Rotor(rotorWiring, randomStart, randomTurnLetter));
+  }
+
+  return new EnigmaMachine(
+    plugboard,
+    reflector,
+    rotors[0],
+    rotors[1],
+    rotors[2]
+  );
 };

@@ -1,12 +1,5 @@
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-// // Input ABCDEFGHIJKLMNOPQRSTUVWXYZ -> output
-const rotorIwiring = "EKMFLGDQVZNTOWYHXUSPAIBRCJ"; // startPos= A, turnover on A
-// const rotorIIwiring = "AJDKSIRUXBLHWTMCQGZNPYFVOE"; // startPos= A, turnover on A
-// const rotorIIIwiring = "BDFHJLCPRTXVZNYEIWGAKMUSQO"; // startPos= A, turnover on A
-// const rotorIVwiring = "ESOVPZJAYQUIRHXLNFTGKDCMWB"; // startPos= A, turnover on A
-// const rotorVwiring = "VZBRGITYUPSDNHLXAWMJQOFECK"; // startPos= A, turnover on A
-
 export class Rotor {
   constructor(wiringTable, startLetter = "A", turnoverLetter = "A") {
     this.currentLetter = startLetter;

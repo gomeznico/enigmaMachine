@@ -33,3 +33,20 @@ Plugboard.prototype.encrypt = function (letter) {
   }
   return letter;
 };
+
+Plugboard.random = function () {
+  let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let numPairs = Math.round(Math.random() * 10);
+  let arrPairs = [];
+  for (let i = 0; i < numPairs; i++) {
+    let idxA = Math.floor(Math.random() * alphabet.length);
+    let letterOne = alphabet[idxA];
+    alphabet = alphabet.slice(0, idxA) + alphabet.slice(idxA + 1);
+    let idxB = Math.floor(Math.random() * alphabet.length);
+    let letterTwo = alphabet[idxB];
+    alphabet = alphabet.slice(0, idxB) + alphabet.slice(idxB + 1);
+    let pair = letterOne + letterTwo;
+    arrPairs.push(pair);
+  }
+  return new Plugboard(arrPairs);
+};
